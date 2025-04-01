@@ -1,20 +1,30 @@
 const http = require("http");
 
-const server = http.createServer((req,res)=>{
-    console.log("Inside Server...")
+// http is a core module that is used to create a server 
 
-    
-    if (req.method == "GET" && req.url=="/books"){
-        console.log("Inside if")
-        res.end("My Books")
-    } else if (req.method == "GET" && req.url == "/products"){
-        console.log("Inside Else If")
-        res.end
+const books = [
+    { id : 1 , name : "Death Note" , author : "Light Yagami"}
+]
+
+
+const server = http.createServer((req, res)=>{
+    if (req.method == "GET" && req.url == "/"){
+        res.end("Welcome to Backend O_O ");
+    } else if (req.method == "GET" && req.url == "/books"){
+        res.end(`${books.map((book)=>(
+            `${book.id}. ${book.name} by ${book.author}`
+        ))}`)
+
+    } else if (req.method == "GET" && req.url =="/products" ){
+        res.end("My Products ...")
     }
+    else (
+        res.end("Oh snap looks like you are lost X_X")
+    )
 })
 
 const backendPort = 8000;
 
-server.listen(backendPort, ()=> {
-    console.log("Server is running on port 8000");
-})
+server.listen(backendPort, ()=>(
+    console.log(`Server is running on port ${backendPort}`)
+))
