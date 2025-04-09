@@ -2,7 +2,14 @@
   "name": "awdiz-backend",
   "version": "1.0.0",
   "description": "Awdiz Backend",
-  "main": "index.js",
+  "homepage" : "https://github.com/DakhaniUsman/awdiz-backend#readme",
+  "bugs" : {
+    "url" : "https://github.com/DakhaniUsman/awdiz-backend/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DakhaniUsman/awdiz-backend.git"
+  },
   "scripts": {
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,6 +17,7 @@
   "author": "",
   "license": "ISC",
   "type": "module",
+  "main": "index.js",
   "dependencies": {
     "express": "^5.1.0"
   }
