@@ -12,16 +12,21 @@ app.get("/", (req, res) => {
    res.send("Welcome to Express Server 0_0 ");
 });
 app.get("/books", (req,res)=>{
+  console.log("Inside Books!")
    res.send(`${books.map((book)=>(
     `${book.id}. ${book.name} by ${book.author}`
   ))}`)
 });
 
 app.get("/products", (req,res)=>{
+  console.log("Inside Products!")
+
   res.send("My Products...")
 })
 
 app.get("/greet", (req,res)=>{
+  console.log("Inside Greet!")
+
   res.send("Welcome!")
 })
 
