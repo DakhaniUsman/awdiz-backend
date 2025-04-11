@@ -2,6 +2,7 @@ import express from "express";
 import { Login, Register } from "./controllers/auth.controllers.js";
 import { Product } from "./controllers/product.controllers.js";
 import AllRoutes from "./routes/index.js";
+import morgan from "morgan";
 
 console.log("Hello from Index");
 
@@ -12,6 +13,7 @@ const books = [{ id: 1, name: "Death Note", author: "Light Yagami" }];
 const app = express();
 
 app.use(express.json())
+app.use(morgan("combined"))
 
 app.use("/api/v1", AllRoutes)
 
