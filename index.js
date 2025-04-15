@@ -5,6 +5,7 @@ import AllRoutes from "./routes/index.js";
 import morgan from "morgan";
 import mongoose from "mongoose";
 import dotenv from "dotenv"
+import cors from "cors"
 
 console.log("Hello from Index");
 
@@ -17,6 +18,7 @@ const app = express();
 app.use(express.json())
 app.use(morgan("combined"))
 dotenv.config();
+app.use(cors())
 
 app.use("/api/v1", AllRoutes)
 

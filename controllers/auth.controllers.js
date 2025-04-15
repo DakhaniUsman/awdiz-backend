@@ -4,7 +4,7 @@ export const Register = async(req, res) => {
     // console.log(req.body);
 
     try {
-        const { name, email, password, confirmPassword } = req.body;
+        const { name, email, password, confirmPassword } = req.body.user;
         // console.log(name, email, password, confirmPassword);
 
         if (!name || !email || !password || !confirmPassword) {
