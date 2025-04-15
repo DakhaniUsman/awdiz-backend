@@ -30,7 +30,7 @@ app.get("/", (req, res) => {
 app.get("/books", (req, res) => {
   console.log("Inside Books!")
   res.send(`${books.map((book) => (
-    `${book.id}. ${book.name} by ${book.author}`
+    `${book.id}. ${book.name} by ${book.author}` 
   ))}`)
 });
 

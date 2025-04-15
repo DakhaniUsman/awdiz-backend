@@ -5,14 +5,14 @@ export const Register = async(req, res) => {
 
     try {
         const { name, email, password, confirmPassword } = req.body.user;
-        // console.log(name, email, password, confirmPassword);
+        console.log(name, email, password, confirmPassword);
 
         if (!name || !email || !password || !confirmPassword) {
-            return res.send("All fields are mandatory...")
+            return res.json({success : false, message : "All fields are mandatory!"})
         }
 
         if (password !== confirmPassword) {
-            return res.send("Password did not matched -_-")
+            return res.json({success : false, message : "Password did not matched -_-"})
         }
 
         // const isEmailExist = await User.find({email : email})
@@ -34,7 +34,7 @@ export const Register = async(req, res) => {
         // }
 
         if (isEmailExist){
-            return res.send("Email already exist *_*")
+            return res.json({success : false , message : "Email already exist *_*"})
         }
 
         const newUser = User({
@@ -42,7 +42,6 @@ export const Register = async(req, res) => {
             email : email,
             password : password,
             confirmPassword : confirmPassword,
-            time : Date.now()
         });
 
         // yaha pe humne model schem ko use kiya hia har new user ko track krne ke liye
@@ -52,7 +51,7 @@ export const Register = async(req, res) => {
         // this is mongoose features or mongoDB querry used to save data in database since it maybe time consuming so use await at every querry
 
         console.log(responseFromMongoDB, "responseFromMongoDB")
-        res.json({ "succes": true, "message": "Registration Completed!" });
+        return res.json({ success: true, message: "Registration Completed!" });
 
     } catch (error) {
         res.send(error, "error while regster api :");
