@@ -7,9 +7,9 @@ const userSchema = new Schema({
     password: { type: String, required: true },
     confirmPassword: { type: String, required: true },
     phone: { type: Number, default: 9876543210 }
-})
+},{timestamps : true})
 
-const User = model("User", userSchema);
+const User = model("Users", userSchema);
 
 export default User;
 
