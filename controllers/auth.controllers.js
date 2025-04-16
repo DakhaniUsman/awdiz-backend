@@ -1,4 +1,5 @@
 import User from "../models/user.schema.js";
+import bcrypt from "bcrypt"
 
 export const Register = async(req, res) => {
     // console.log(req.body);
@@ -37,11 +38,16 @@ export const Register = async(req, res) => {
             return res.json({success : false , message : "Email already exist *_*"})
         }
 
+        const hashedPassword = await bcrypt.hash(password,10);
+        console.log(hashedPassword,"hashedPassword");
+
+        const hasshedConfirmPassword = await    bcrypt.hash(confirmPassword,10);
+        console.log(hasshedConfirmPassword,"hasshedConfirmPassword");
+
         const newUser = User({
             name : name,
             email : email,
-            password : password,
-            confirmPassword : confirmPassword,
+            password : hashedPassword,
         });
 
         // yaha pe humne model schem ko use kiya hia har new user ko track krne ke liye
@@ -54,8 +60,7 @@ export const Register = async(req, res) => {
         return res.json({ success: true, message: "Registration Completed!" });
 
     } catch (error) {
-        res.send(error, "error while regster api :");
-        res.send(error)
+        res.json({success:false, message : error});
     }
 
 }

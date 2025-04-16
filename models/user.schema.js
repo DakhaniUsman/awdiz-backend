@@ -4,8 +4,7 @@ import { model, Schema } from "mongoose"
 const userSchema = new Schema({
     name: { type: String, required: true },
     email: { type: String, required: true },
-    password: { type: String, required: true },
-    confirmPassword: { type: String, required: true },
+    password: { type: String, required: true }, x
     phone: { type: Number, default: 9876543210 }
 },{timestamps : true})
 
