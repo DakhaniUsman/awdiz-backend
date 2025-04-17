@@ -65,11 +65,34 @@ export const Register = async(req, res) => {
 
 }
 
-export const Login = (req, res) => {
+export const Login = async(req, res) => {
     try {
-        return res.send("Login Successfull!")
+        const {email, password} = req.body.userData;
+
+        if (!email || !password){
+            return res.json({success: false , message : "All fields are required"})
+        }
+        console.log(email,"email",password,"password")
+
+        
+        const isEmailExist = await User.findOne({email : email});
+        
+        if(isEmailExist){
+        console.log(isEmailExist.password,"isEmailExist.password", password,"password");
+        const isPasswordCorrect = await bcrypt.compare(password,isEmailExist.password);
+        console.log(isPasswordCorrect);
+
+        if(isPasswordCorrect){
+            return res.send({success : true , message : "Login Successfull!"})
+        }else {
+            return res.json({success  : false , message : "Password not matched"})
+        }
+        } else{
+            return res.json({success : false , message : "Kindly register"})
+        }
+
     } catch (error) {
-        res.send("error while login api :", error)
+        res.json({success : false , message : error.data.message})
     }
 
 }
