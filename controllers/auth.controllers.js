@@ -74,16 +74,16 @@ export const Login = async(req, res) => {
         }
         console.log(email,"email",password,"password")
 
-        
+
         const isEmailExist = await User.findOne({email : email});
-        
+
         if(isEmailExist){
         console.log(isEmailExist.password,"isEmailExist.password", password,"password");
         const isPasswordCorrect = await bcrypt.compare(password,isEmailExist.password);
-        console.log(isPasswordCorrect);
+        console.log(isPasswordCorrect,"isPasswordCorrect");
 
         if(isPasswordCorrect){
-            return res.send({success : true , message : "Login Successfull!"})
+            return res.json({success : true , message : "Login Successfull!", userData : { name : isEmailExist.name , token : "abcde"} })
         }else {
             return res.json({success  : false , message : "Password not matched"})
         }
