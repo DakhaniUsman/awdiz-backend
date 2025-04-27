@@ -1,5 +1,6 @@
 import User from "../models/user.schema.js";
 import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
 
 export const Register = async(req, res) => {
     // console.log(req.body);
@@ -82,8 +83,11 @@ export const Login = async(req, res) => {
         const isPasswordCorrect = await bcrypt.compare(password,isEmailExist.password);
         console.log(isPasswordCorrect,"isPasswordCorrect");
 
+        const jwtToken = jwt.sign({ userId : isEmailExist._id} , process.env.SECRETKEY)
+        console.log(jwtToken,"jwtToken")
+
         if(isPasswordCorrect){
-            return res.json({success : true , message : "Login Successfull!", userData : { name : isEmailExist.name }, token : "abcde" })
+            return res.json({success : true , message : "Login Successfull!", userData : { name : isEmailExist.name }, token : jwtToken })
         }else {
             return res.json({success  : false , message : "Password not matched"})
         }
@@ -95,4 +99,40 @@ export const Login = async(req, res) => {
         res.json({success : false , message : error.data.message})
     }
 
+}
+
+export const GetCurrentUser = async(req,res) => {
+    try {
+        const token = req.body.token;
+        console.log(token,"token")
+
+        if(!token){
+            return res.json({success : false , message : "Token Not Found!"})
+        }
+        
+
+        const tokenData = jwt.verify(token,process.env.SECRETKEY)
+        console.log(tokenData,"tokenData")
+
+
+        if(!tokenData){
+            return res.json({success : false , message : "Token Data Not Found!"})
+        }
+        const isUserExist = await User.findById(tokenData.userId);
+        console.log(isUserExist,"isUserExist")
+
+        const jwtToken = jwt.sign({ userId : isUserExist._id} , process.env.SECRETKEY)
+
+
+        if(isUserExist){
+            return res.json({success : true , message : "Welcome User!", userData : { name : isUserExist.name }, token : jwtToken })
+        } else {
+            return res.json({success : false , message : "User Not Found!"})
+
+        }
+    } catch (error) {
+        console.log(error,"error")
+        res.json({success : false , message : error})
+        
+    }
 }
