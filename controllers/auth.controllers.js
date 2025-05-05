@@ -125,7 +125,7 @@ export const GetCurrentUser = async(req,res) => {
 
 
         if(isUserExist){
-            return res.json({success : true , message : "Welcome User!", userData : { name : isUserExist.name }, token : jwtToken })
+            return res.json({success : true , message : "Welcome User!", userData : { userId : isUserExist._id,name : isUserExist.name }, token : jwtToken })
         } else {
             return res.json({success : false , message : "User Not Found!"})
 
