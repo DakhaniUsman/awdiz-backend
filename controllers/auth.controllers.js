@@ -6,10 +6,10 @@ export const Register = async(req, res) => {
     // console.log(req.body);
 
     try {
-        const { name, email, password, confirmPassword } = req.body.user;
-        console.log(name, email, password, confirmPassword);
+        const { name, email,role, password, confirmPassword } = req.body.user;
+        console.log(name, email,role, password, confirmPassword);
 
-        if (!name || !email || !password || !confirmPassword) {
+        if (!name || !email || !role || !password || !confirmPassword) {
             return res.json({success : false, message : "All fields are mandatory!"})
         }
 
@@ -48,6 +48,7 @@ export const Register = async(req, res) => {
         const newUser = User({
             name : name,
             email : email,
+            role : role,
             password : hashedPassword,
         });
 
@@ -86,8 +87,8 @@ export const Login = async(req, res) => {
         const jwtToken = jwt.sign({ userId : isEmailExist._id} , process.env.SECRETKEY)
         console.log(jwtToken,"jwtToken")
 
-        if(isPasswordCorrect){
-            return res.json({success : true , message : "Login Successfull!", userData : { name : isEmailExist.name }, token : jwtToken })
+        if(isEmailExist && isPasswordCorrect){
+            return res.json({success : true , message : "Login Successfull!", userData : {userId : isEmailExist._id,role : isEmailExist.role ,name : isEmailExist.name }, token : jwtToken }) 
         }else {
             return res.json({success  : false , message : "Password not matched"})
         }
@@ -125,7 +126,9 @@ export const GetCurrentUser = async(req,res) => {
 
 
         if(isUserExist){
-            return res.json({success : true , message : "Welcome User!", userData : { userId : isUserExist._id,name : isUserExist.name }, token : jwtToken })
+            return res.json({success : true , message : "Welcome User!", userData : { userId : isUserExist._id, role : isUserExist.role,name : isUserExist.name }, token : jwtToken })
+
+            //  return res.json({success : true , message : "Login Successfull!", userData : { name : isEmailExist.name }, token : jwtToken })
         } else {
             return res.json({success : false , message : "User Not Found!"})
 
