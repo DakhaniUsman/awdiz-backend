@@ -1,6 +1,6 @@
 import express from "express";
 import { Login, Register } from "./controllers/auth.controllers.js";
-import { Product } from "./controllers/product.controllers.js";
+import { getProduct } from "./controllers/product.controllers.js";
 import AllRoutes from "./routes/index.js";
 import morgan from "morgan";
 import mongoose from "mongoose";
@@ -49,7 +49,7 @@ app.get("/greet", (req, res) => {
 })
 
 app.post("/register", Register);
-app.post("/product", Product);
+app.post("/get-product", getProduct);
 app.post("/login", Login);
 
 app.get("/hello", (req, res) => {
