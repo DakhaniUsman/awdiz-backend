@@ -88,7 +88,7 @@ export const Login = async(req, res) => {
         console.log(jwtToken,"jwtToken")
 
         if(isEmailExist && isPasswordCorrect){
-            return res.json({success : true , message : "Login Successfull!", userData : {userId : isEmailExist._id,role : isEmailExist.role ,name : isEmailExist.name }, token : jwtToken }) 
+            return res.json({success : true , message : "Login Successfull!", userData : {userId : isEmailExist._id,role : isEmailExist.role ,name : isEmailExist.name }, token : jwtToken })
         }else {
             return res.json({success  : false , message : "Password not matched"})
         }
@@ -97,7 +97,7 @@ export const Login = async(req, res) => {
         }
 
     } catch (error) {
-        res.json({success : false , message : error.data.message})
+       return res.json({success : false , message : "Error while Login"})
     }
 
 }
@@ -110,7 +110,7 @@ export const GetCurrentUser = async(req,res) => {
         if(!token){
             return res.json({success : false , message : "Token Not Found!"})
         }
-        
+
 
         const tokenData = jwt.verify(token,process.env.SECRETKEY)
         console.log(tokenData,"tokenData")
@@ -136,6 +136,6 @@ export const GetCurrentUser = async(req,res) => {
     } catch (error) {
         console.log(error,"error")
         res.json({success : false , message : error})
-        
+
     }
 }
