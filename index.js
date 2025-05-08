@@ -49,7 +49,7 @@ app.get("/greet", (req, res) => {
 })
 
 app.post("/register", Register);
-app.post("/products", Product);
+app.post("/product", Product);
 app.post("/login", Login);
 
 app.get("/hello", (req, res) => {

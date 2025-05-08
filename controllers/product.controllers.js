@@ -16,9 +16,8 @@ export const AddProduct = (req, res) => {
 
     if (!name || !price || !quantity || !category || !image ){
       return res.json({success : false , message : "Failed to Add Product!"})
+
     }
-
-
     return res.json({success : true , message : "Product Has Been Added!"});
   } catch (error) {
     console.log(`Error while creating product : ${error}`);
