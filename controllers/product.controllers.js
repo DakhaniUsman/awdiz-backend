@@ -25,7 +25,7 @@ export const AddProduct = async(req, res) => {
 
     if(isUserExist?.role !== "seller"){
       return res.json({ success : false , message : "You do not have access to add products."})
-    } 
+    }
 
 
 
@@ -67,4 +67,19 @@ export const AddedProduct = async(req,res)=> {
   }
 
   return res.json ({success : false , message : "Error while getting added products!"})
+}
+
+export const SingleProduct = async(req,res) => {
+
+  const {userId} = req.body;
+
+  if(!userId){
+    return res.json ({success : false , message : "User Id not found"})
+  }
+
+  
+
+
+
+
 }
