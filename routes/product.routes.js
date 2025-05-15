@@ -3,7 +3,7 @@ import { AddProduct, getProduct, AddedProduct , SingleProduct } from "../control
 
 const ProductRoutes = Router();
 
-ProductRoutes.get("/get-all-products", getProduct)
+ProductRoutes.post("/get-all-products", getProduct)
 ProductRoutes.post("/add-product", AddProduct)
 ProductRoutes.post("/get-added-products", AddedProduct)
 ProductRoutes.post("/get-single-product", SingleProduct)

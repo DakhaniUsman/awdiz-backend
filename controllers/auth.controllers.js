@@ -83,11 +83,12 @@ export const Login = async(req, res) => {
         console.log(isEmailExist.password,"isEmailExist.password", password,"password");
         const isPasswordCorrect = await bcrypt.compare(password,isEmailExist.password);
         console.log(isPasswordCorrect,"isPasswordCorrect");
+        
 
         const jwtToken = jwt.sign({ userId : isEmailExist._id} , process.env.SECRETKEY)
         console.log(jwtToken,"jwtToken")
 
-        if(isEmailExist && isPasswordCorrect){
+        if(isPasswordCorrect){
             return res.json({success : true , message : "Login Successfull!", userData : {userId : isEmailExist._id,role : isEmailExist.role ,name : isEmailExist.name }, token : jwtToken })
         }else {
             return res.json({success  : false , message : "Password not matched"})

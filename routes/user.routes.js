@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { Users } from "../controllers/user.controllers.js";
+import { addToCart } from "../controllers/user.controllers.js";
 
 const UserRoutes = Router();
 
-UserRoutes.get("/get-user", Users)
+UserRoutes.post("/add-to-cart", addToCart)
 
 export default UserRoutes;

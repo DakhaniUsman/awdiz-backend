@@ -1,10 +1,27 @@
 import User from "../models/user.schema.js";
 import Product from "../models/product.schema.js";
 
-export const getProduct = (req, res) => {
+export const getProduct = async(req, res) => {
   try {
-    return res.send("Product Fetched");
+
+    console.log(req.body,"req.body")
+    const {userId} = req.body.user;
+    console.log(userId,"userId")
+
+      if(!userId){
+      return res.json({ success  : false , message : "User Id not found!"})
+    }
+
+    const products = await Product.find();
+
+    console.log(products,"products")
+    if(!products){
+      return res.json ({ success : false , message : "Products not found"})
+    }
+
+    return res.json({ success : true , message : "Products fetched successfully!" , products : products});
   } catch (error) {
+    console.log(error,"error")
     res.send(" Error while product api:", error);
   }
 };
@@ -71,15 +88,42 @@ export const AddedProduct = async(req,res)=> {
 
 export const SingleProduct = async(req,res) => {
 
-  const {userId} = req.body;
+   try {
 
-  if(!userId){
-    return res.json ({success : false , message : "User Id not found"})
+    
+    console.log(req.body,"req.body")
+    const {userId} = req.body;
+    console.log(userId,"userId")
+
+      if(!userId){
+      return res.json({ success  : false , message : "User Id not found!"})
+    }
+    const {productId} = req.body;
+
+  console.log(productId,'productId')
+
+  if(!productId){
+    return res.json ({success : false , message : "Product Id not found"})
   }
 
   
+  const productData = await Product.findById(productId).populate("userId");
 
+  console.log(productData,"productData");
 
+  if(!productData){
+    return res.json ({success : false , message : "Product not found!"})
+  }
 
+  // const singleProductSeller = await User.findById({_id : productData.userId});
+
+  // console.log(singleProductSeller,"singleProductSeller")
+ 
+  return res.json({success : true , message : "Product fetched successfully" , productData : productData })
+
+   } catch (error){
+    console.log(error,"error");
+    return res.json ({success : false , message : "Error while fetching single product!"})
+   }
 
 }

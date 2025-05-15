@@ -1,6 +1,6 @@
-import mongoose, { model, Schema } from "mongoose";
+import { model, Schema } from "mongoose"
 
-const productSchema = new Schema({
+const cartSchema = new cartSchema({
     name : {type : String, required : true},
     price : {type : Number, required : true},
     quantity : {type : Number, required : true},
@@ -9,9 +9,28 @@ const productSchema = new Schema({
     userId : {type : mongoose.Schema.Types.ObjectId, ref : "Users"} 
 },{timestamps : true})
 
-// relation building with other schema 
-//  here we are saying that userId has objectId from User schema  
 
-const Product = model("Product", productSchema);
+const Cart = model("Carts", cartSchema);
+export default Cart
 
-export default Product;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
