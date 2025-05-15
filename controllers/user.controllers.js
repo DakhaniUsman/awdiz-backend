@@ -1,3 +1,5 @@
+import Cart from "../models/cart.schema.js";
+import Product from "../models/product.schema.js";
 import User from "../models/user.schema.js";
 
 export const addToCart = async (req, res) => {
@@ -25,14 +27,24 @@ export const addToCart = async (req, res) => {
       return res.json({ success: false, message: "User not found!" });
     }
 
-    const isProductExist = await User.findById(userId);
+    const isProductExist = await Product.findById(productId);
 
     console.log(isProductExist, "isProductExist");
     if (!isProductExist) {
       return res.json({ success: false, message: "Product not found!:" });
     }
 
-    return res.send("Welcome User!");
+
+    const newCarProduct = new Cart({
+        userId : userId,
+        productId : [productId]
+    })
+
+    await newCarProduct.save();
+
+    console.log(newCarProduct, "newCarProduct");    
+
+    return res.json({ success : true , message : "Product addded to the cart!" , cart : newCarProduct});
   } catch (error) {
     return res.send("Error while user api :", error);
   }
