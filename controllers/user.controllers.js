@@ -34,59 +34,122 @@ export const addToCart = async (req, res) => {
       return res.json({ success: false, message: "Product not found!:" });
     }
 
-    const isUserDocumentExist = await Cart.findOne({ userId : userId });
-    console.log(isUserDocumentExist,"isUserDocumentExist");
-    if (isUserDocumentExist) {
-      isUserDocumentExist.productId.push(productId);
-      await isUserDocumentExist.save();
-    } else {
-      const newCarProduct = new Cart({
-        userId: userId,
-        productId: [productId],
-      });
-      console.log(newCarProduct, "newCarProduct");
-      await newCarProduct.save();
-    }
+    // const isUserDocumentExist = await Cart.findOne({ userId : userId });
+    // console.log(isUserDocumentExist,"isUserDocumentExist");
+    // if (isUserDocumentExist) {
+    //   isUserDocumentExist.productId.push(productId);
+    //   await isUserDocumentExist.save();
+    // } else {
+    //   const newCarProduct = new Cart({
+    //     userId: userId,
+    //     productId: [productId],
+    //   });
+    //   console.log(newCarProduct, "newCarProduct");
+    //   await newCarProduct.save();
+    // }
 
+    const cartData = await Cart.findOneAndUpdate(
+      { userId: userId },
+      { $addToSet: { productId: productId } },
+      { new: true, upsert: true }
+    );
+
+    console.log(cartData, "cartData");
 
     return res.json({
+      cartData: cartData,
       success: true,
-      message: "Product addded to the cart!"});
+      message: "Product addded to the cart!",
+    });
   } catch (error) {
-    console.log(error,"error")
+    console.log(error, "error");
     return res.send("Error while user api :", error);
   }
 };
 
+export const getCartProducts = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    console.log(userId, "userId");
 
-export const getCartProducts = async(req,res) => {
+    if (!userId) {
+      return res.json({ success: false, message: "User Id not found!" });
+    }
 
-try {
-    const {userId} = req.body;
-    console.log(userId,"userId")
+    const isUserCartExit = await Cart.findOne({ userId }).populate("productId");
 
-  if(!userId){
-    return res.json ({ success : false, message : "User Id not found!"});
-  }
+    console.log(isUserCartExit, "isUserCartExit");
 
-  const isUserCartExit = await Cart.findOne({userId}).populate("productId");
+    if (!isUserCartExit) {
+      return res.json({
+        success: true,
+        message: "No products found",
+        products: [],
+      });
+    }
 
-  console.log(isUserCartExit,"isUserCartExit");
+    const totalPrice = isUserCartExit.productId.reduce((acc, price) => {
+      return acc + price.price;
+    });
 
-  if(!isUserCartExit){
     return res.json({
-      success : true,
-      message : "No products found",
-      products : []
-    })
-  } 
-  return res.json ({
-    success : true,
-      message : "Products fetched successfully",
-      products : isUserCartExit.productId
-  })
-} catch (error) {
-  console.log(error,"error")
-}
+      success: true,
+      message: "Products fetched successfully",
+      products: isUserCartExit.productId,
+      totalPrice : totalPrice,
+    });
+  } catch (error) {
+    console.log(error, "error");
+  }
+};
 
-}
+export const removeCartProduct = async (req, res) => {
+  try {
+    const { userId, productId } = req.body;
+    console.log(userId, productId, "userId, productId");
+
+    if (!userId) {
+      return res.json({ success: false, message: "User Id not found!" });
+    }
+    const isUserExist = await User.findById(userId);
+    console.log(isUserExist, "isUserExist");
+    if (!isUserExist) {
+      return res.json({ success: false, message: "User not found!" });
+    }
+
+    console.log(productId, "productId");
+    if (!productId) {
+      return res.json({ success: false, message: "Product Id not found!" });
+    }
+
+    const isProductExist = await Cart.findOne({ productId: productId });
+    console.log(isProductExist, "isProductExist");
+    if (!isProductExist) {
+      return res.json({ success: false, message: "Product not found!" });
+    }
+    const isUserCartExit = await Cart.findOne({ userId: userId });
+    if (!isUserCartExit) {
+      return res.json({ success: false, message: "No products found!" });
+    }
+    console.log(isUserCartExit, "isUserCartExit");
+
+    const removedProduct = await Cart.findOneAndUpdate(
+      { userId: userId },
+      { $pull: { productId: productId } },
+      { new: true }
+    );
+    console.log(removedProduct, "removedProduct");
+
+    if (!removedProduct) {
+      return res.json({ success: false, message: "Product not removed!" });
+    }
+
+    return res.json({ success: true, message: "Product removed from cart!" });
+  } catch (error) {
+    console.log(error, "error");
+    res.json({
+      success: false,
+      mesage: "Error while removing product from cart!",
+    });
+  }
+};
