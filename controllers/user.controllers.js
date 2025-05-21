@@ -88,9 +88,14 @@ export const getCartProducts = async (req, res) => {
       });
     }
 
-    const totalPrice = isUserCartExit.productId.reduce((acc, price) => {
-      return acc + price.price;
-    });
+
+
+    let totalPrice = 0;
+
+    for (let i = 0; i < isUserCartExit.productId.length; i ++){
+      totalPrice += isUserCartExit.productId[i].price;
+    }
+    console.log(totalPrice, "totalPrice");  
 
     return res.json({
       success: true,
